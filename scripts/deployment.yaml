@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book-catalog
+  template:
+    metadata:
+      labels:
+        app: book-catalog
+    spec:
+      containers: 
+      - name: book-catalog
+        image: week_8:1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000  # Corrected this to be inside a list
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://tharuka_sit722_part2_user:IkkqvAb5zGlEJHuxZqNsCXywAQHtWFNP@dpg-crerbu0gph6c73euv7qg-a.oregon-postgres.render.com/tharuka_sit722_part2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-catalog
+spec:
+  selector:
+    app: book-catalog
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
